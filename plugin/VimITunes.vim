@@ -1,8 +1,8 @@
 " -*- vim -*-
-" @(#) $Id: VimITunes.vim,v 1.0 2003-01-07 13:41:21 EST eralston exp $
+" @(#) $Id: VimITunes.vim,v 1.0 2003-01-09 07:55:44 EST eralston exp $
 "
 " Vim global plugin for controlling iTunes from within Vim.
-" Last Change: 2003-01-07 13:42:21
+" Last Change: 2003-01-09 07:55:44
 " Maintainer: Ed Ralston <eralston@techsan.org>
 "
 " created 2003-01-07 13:42:21 eralston@techsan.org
@@ -10,8 +10,8 @@
 " Copyright 2003 Ed Ralston
 " Free distribution, use, and modification permitted under GPL2.
 "
-" For the latest version of this file, see
-" http://www.vim.org/script_search.php?keywords=VimITunes
+" For the latest version of this file, see:
+" http://www.vim.org/script.php?script_id=523
 "
 " Loosely based on vimxmms.vim by Danie Roux <droux@tuks.co.za>:
 " http://www.vim.org/script.php?script_id=28
@@ -24,7 +24,7 @@
 "    set when this plugin is loaded, then several useful maps
 "    are created.  For example, if in your ".vimrc" you have
 "
-"       set g:VimITunesMapPrefix = ",x"
+"       let g:VimITunesMapPrefix = ",x"
 "
 "    then after this plugin is loaded, you can use the following maps:
 "
@@ -50,10 +50,17 @@
 "     If you want to use the mappings, then in your ".vimrc" file,
 "     add something like the following:
 "
-"       set g:VimITunesMapPrefix = ",x"
+"       let g:VimITunesMapPrefix = ",x"
+"
+" BUGS:
+"     Can lock up if used while iTunes is shutting down (i.e.,
+"     if you issue a VimITunes command within approx. 10 seconds
+"     after telling iTunes to quit).  This appears to be a bug
+"     in osascript (supplied by Apple), and not this script.
 "
 "
 
+" gnothi seauton
 if exists( "loaded_VimITunes" )
    finish
 endif
@@ -71,6 +78,7 @@ elseif filereadable( "/bin/osascript" )
 elseif filereadable( "/sbin/osascript" )
    let s:Osa = "/sbin/osascript"
 else
+   " Hmm, guess we're not on a Mac.  Bail out.
    finish
 endif
 
@@ -104,7 +112,7 @@ function! s:MkMenu( title, shortcut, cmd )
 endfunction
 
 function! s:MkMap( char, cmd )
-   exe ":noremap <unique> " . s:map_prefix . a:char . " " . a:cmd
+   exe ":noremap <silent> <unique> " . s:map_prefix . a:char . " " . a:cmd
 endfunction
 
 
@@ -154,8 +162,10 @@ call s:MkMenu( "Display\\ Song\\ Title", "?", ":echo VimITunesCurrentlyPlaying()
 call s:MkMenu( "Disable\\ Song", "d", ":echo VimITunesDisablePlaying()<CR>" )
 call s:MkMenu( "Enable\\ Song", "e", ":echo VimITunesEnablePlaying()<CR>" )
 
+" these were used to set up the menu and maps; no longer needed.
 delfunction s:MkMap
 delfunction s:MkMenu
+unlet s:map_prefix
 
 
 function! TellVimITunes( ... )
