@@ -1,0 +1,24 @@
+This is a mirror of http://www.vim.org/scripts/script.php?script_id=523
+
+Allows controlling iTunes on Macintosh from within Vim.
+
+Adds a menu "iTunes" that contains various commands to control iTunes.
+
+Additionally, if the global variable "VimITunesMapPrefix" is set when this plugin is loaded, then several useful maps are created.  For example, if in your ".vimrc" you have
+
+   let g:VimITunesMapPrefix = ",x"
+
+then after this plugin is loaded, you can use the following maps:
+
+       ,xq    Quit iTunes
+       ,xs    Toggle Shuffle Mode
+       ,xp    Toggle Pause Mode
+       ,xl    Next Song
+       ,xh    Previous Song
+       ,xk    Volume Up
+       ,xj    Volume Down
+       ,xm    Mute
+       ,x?    Display Song Title
+       ,xd    Disable the current song
+       ,xe    Enable the current song
+
